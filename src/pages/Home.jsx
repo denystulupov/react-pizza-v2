@@ -8,21 +8,33 @@ function Home() {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortId, setSortId] = React.useState({
+    name: 'популярности ↓',
+    sortProperty: 'rating',
+    orderType: 'desc',
+  });
+
   React.useEffect(() => {
-    fetch('https://634d19d8acb391d34a93d15b.mockapi.io/items')
+    let category = categoryId ? 'category=' + categoryId : '';
+
+    setIsLoading(true);
+    fetch(
+      `https://634d19d8acb391d34a93d15b.mockapi.io/items?${category}&sortBy=${sortId.sortProperty}&order=${sortId.orderType}`,
+    )
       .then((res) => res.json())
       .then((arr) => {
         setItems(arr);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, []);
+  }, [categoryId, sortId]);
 
   return (
     <>
       <div className="content__top">
-        <Categories />
-        <Sort />
+        <Categories activeIndex={categoryId} setActiveIndex={(i) => setCategoryId(i)} />
+        <Sort selected={sortId} setSelected={setSortId} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
