@@ -1,19 +1,24 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSort } from '../redux/slices/filterSlice';
 
-function Sort({ selected, setSelected }) {
+const list = [
+  { name: 'популярности ↓', sortProperty: 'rating', orderType: 'desc' },
+  { name: 'популярности ↑', sortProperty: 'rating', orderType: 'asc' },
+  { name: 'цене ↓', sortProperty: 'price', orderType: 'desc' },
+  { name: 'цене ↑', sortProperty: 'price', orderType: 'asc' },
+  { name: 'алфавиту ↓', sortProperty: 'title', orderType: 'asc' },
+  { name: 'алфавиту ↑', sortProperty: 'title', orderType: 'desc' },
+];
+
+function Sort({ setSelected }) {
+  const selected = useSelector((state) => state.filter.sort);
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
 
-  const list = [
-    { name: 'популярности ↓', sortProperty: 'rating', orderType: 'desc' },
-    { name: 'популярности ↑', sortProperty: 'rating', orderType: 'asc' },
-    { name: 'цене ↓', sortProperty: 'price', orderType: 'desc' },
-    { name: 'цене ↑', sortProperty: 'price', orderType: 'asc' },
-    { name: 'алфавиту ↓', sortProperty: 'title', orderType: 'asc' },
-    { name: 'алфавиту ↑', sortProperty: 'title', orderType: 'desc' },
-  ];
-
-  const onClickSelected = (newSelected) => {
-    setSelected(newSelected);
+  const onClickSelected = (newSort) => {
+    dispatch(setSort(newSort));
     setOpen(false);
   };
 
