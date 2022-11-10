@@ -74,7 +74,6 @@ function Home() {
         (item) => item.sortProperty === params.sortProperty && item.orderType === params.orderType,
       );
       params.sort = sort;
-      console.log(params);
 
       dispatch(setFilter(params));
 
