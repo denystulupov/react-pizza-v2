@@ -6,7 +6,7 @@ import { selectCart } from '../redux/slices/cartSlice';
 
 function Header() {
   const { totalPrice, items } = useSelector(selectCart);
-  const pizzaCount = items.reduce((sum, item) => sum + item.count, 0);
+  const pizzaCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
 
   const { pathname } = useLocation();
 

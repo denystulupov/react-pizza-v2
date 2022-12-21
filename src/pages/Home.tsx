@@ -13,10 +13,10 @@ import {
 } from '../redux/slices/filterSlice';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
-import { list } from '../components/Sort';
+import { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
 
-function Home() {
+const Home: React.FC = () => {
   const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
 
@@ -25,7 +25,7 @@ function Home() {
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
-  const onChangePage = (newPageNumber) => {
+  const onChangePage = (newPageNumber: number) => {
     dispatch(setCurrentPage(newPageNumber));
   };
 
@@ -34,6 +34,7 @@ function Home() {
     const search = searchValue ? `&search=${searchValue}` : '';
 
     dispatch(
+      // @ts-ignore
       fetchPizzas({
         category,
         search,
@@ -62,7 +63,7 @@ function Home() {
   React.useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search, { ignoreQueryPrefix: true });
-      let sort = list.find(
+      let sort = sortList.find(
         (item) => item.sortProperty === params.sortProperty && item.orderType === params.orderType,
       );
       params.sort = sort;
@@ -85,19 +86,22 @@ function Home() {
   }, [categoryId, sort, searchValue, currentPage]);
 
   const skeletons = [...new Array(8)].map((_, i) => <Skeleton key={i} />);
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+  const pizzas = items.map((obj: any) => <PizzaBlock key={obj.id} {...obj} />);
 
   return (
     <>
       <div className="content__top">
-        <Categories activeIndex={categoryId} setActiveIndex={(i) => dispatch(setCategoryId(i))} />
+        <Categories
+          activeIndex={categoryId}
+          setActiveIndex={(i: number) => dispatch(setCategoryId(i))}
+        />
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {status === 'error' ? (
         <div className="content__error-info">
           <h2>
-            Произошла ошибка <icon>😕</icon>
+            Произошла ошибка <span>😕</span>
           </h2>
           <p>
             К сожалениюб не удалось получить пиццы.
@@ -112,6 +116,6 @@ function Home() {
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </>
   );
-}
+};
 
 export default Home;

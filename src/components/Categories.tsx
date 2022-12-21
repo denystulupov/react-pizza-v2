@@ -1,8 +1,13 @@
 import React from 'react';
 
-function Categories({ activeIndex, setActiveIndex }) {
-  const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+type CategoriesPropsType = {
+  activeIndex: number;
+  setActiveIndex: (index: number) => void;
+};
 
+const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+
+const Categories: React.FC<CategoriesPropsType> = ({ activeIndex, setActiveIndex }) => {
   // const onClickCategory = (index) => {
   //   setActiveIndex(index);
   // };
@@ -21,6 +26,6 @@ function Categories({ activeIndex, setActiveIndex }) {
       </ul>
     </div>
   );
-}
+};
 
 export default Categories;
