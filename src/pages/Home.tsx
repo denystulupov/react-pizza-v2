@@ -15,12 +15,14 @@ import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 import { sortList } from '../components/Sort';
 import { fetchPizzas, selectPizzaData } from '../redux/slices/pizzaSlice';
+import { useAppDispatch } from '../redux/store';
 
 const Home: React.FC = () => {
   const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
   const { items, status } = useSelector(selectPizzaData);
 
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
@@ -34,12 +36,12 @@ const Home: React.FC = () => {
     const search = searchValue ? `&search=${searchValue}` : '';
 
     dispatch(
-      // @ts-ignore
       fetchPizzas({
         category,
         search,
         currentPage,
-        sort,
+        sortProperty: sort.sortProperty,
+        orderType: sort.orderType,
       }),
     );
   };
@@ -62,7 +64,7 @@ const Home: React.FC = () => {
   //Если был первый рендер, то проверяем URL-параметры и сохраняем в redux
   React.useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search, { ignoreQueryPrefix: true });
+      const params: any = qs.parse(window.location.search, { ignoreQueryPrefix: true });
       let sort = sortList.find(
         (item) => item.sortProperty === params.sortProperty && item.orderType === params.orderType,
       );
